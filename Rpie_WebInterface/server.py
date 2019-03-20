@@ -44,12 +44,27 @@ def send_data(con, payload):
     con.send(frame_to_send)
 
 
+import RPi.GPIO as io
+io.setwarnings(False)
+io.setmode(io.BCM)
+io.setup(14, io.IN)
+
+
+
+
+
+
 while True:
 	con, addr = s.accept()
 	print(addr)
 	
 	upgrade_ws_request(con)
-	for i in range(100):
-		send_data(con,str(i%2))
+	
+	q = None
+	while True:
+		send_data(con,str(1 - io.input(14)))
 		time.sleep(0.1)
+		
+	
 	con.close()
+		
